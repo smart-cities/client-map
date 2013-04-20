@@ -1,0 +1,76 @@
+[
+    {
+        "name": "luracast/restler",
+        "version": "3.x-dev",
+        "version_normalized": "3.9999999.9999999.9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Luracast/Restler.git",
+            "reference": "182a25438637ad98874e2a3093e01d17cc64519d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Luracast/Restler/zipball/182a25438637ad98874e2a3093e01d17cc64519d",
+            "reference": "182a25438637ad98874e2a3093e01d17cc64519d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "behat/behat": "2.4.*@stable",
+            "guzzle/guzzle": "2.4.*",
+            "luracast/explorer": "*",
+            "mustache/mustache": "dev-master",
+            "rodneyrehm/plist": "dev-master",
+            "symfony/yaml": "*",
+            "zendframework/zendamf": "dev-master"
+        },
+        "suggest": {
+            "behat/behat": "Behaviour driven development testing framework (see require-dev for details)",
+            "guzzle/guzzle": "RESTful api HTTP client framework (see require-dev for details)",
+            "luracast/explorer": "Restler's very own api explorer (see require-dev for details)",
+            "rodneyrehm/plist": "Restler supports tho Apple plist xml format (see require-dev for details)",
+            "symfony/yaml": "Restler can produce content in yaml format as well (see require-dev for details)",
+            "zendframework/zendamf": "Support for the amf document format  (see require-dev for details)"
+        },
+        "time": "2013-01-01 19:30:00",
+        "bin": [
+            "vendor/restler.php"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "v3": "v3.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Luracast\\Restler": "vendor/"
+            }
+        },
+        "notification-url": "http://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Luracast",
+                "email": "arul@luracast.com"
+            },
+            {
+                "name": "Nick nickl- Lombard",
+                "email": "github@jigsoft.co.za"
+            }
+        ],
+        "description": "Restler is a simple and effective multi-format Web API Server framework written in PHP. Just deal with your business logic in php, Restler will take care of the REST!",
+        "homepage": "http://luracast.com/products/restler/",
+        "keywords": [
+            "api",
+            "framework",
+            "rest",
+            "server"
+        ]
+    }
+]
