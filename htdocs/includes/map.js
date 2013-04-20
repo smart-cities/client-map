@@ -90,7 +90,6 @@ var page = {
 		}
 	},
 	show_tooltip: function(polygon) {
-		console.log(polygon.feature);
 		$('#tooltip').html("<h1>" + polygon.feature.attributes.name + "</h1><p>Temperature: "+ polygon.feature.attributes.data.temperature + "&deg; C<br>Humidity: "+ polygon.feature.attributes.data.humidity + "%</p>").show();
 	},
 	hide_tooltip: function(polygon) {
@@ -101,7 +100,7 @@ var page = {
 		$('.content').hide();
 		$('#home').show();
 		$('nav li a').unbind().click(function(){
-			console.log($(this).attr('id'), $(this).attr('data-page'));
+			//console.log($(this).attr('id'), $(this).attr('data-page'));
 			$('.content').hide();
 			$('nav li a').removeClass('active');
 			$('#' + $(this).attr('id')).addClass('active');
