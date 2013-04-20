@@ -83,7 +83,7 @@ nav a:hover, .active{
 }
 #map {
 	border:1px solid #ccc;
-	border-radius:5px 5px;
+	border-radius:5px;
 	width:auto;
 	height:30em;
 	display:block;
@@ -133,7 +133,9 @@ nav a:hover, .active{
 	position:relative;
 	width:1150px;
 	height:733px;
-	margin:0 auto;
+	margin:1em auto auto auto;
+	border:0 solid #FFF;
+	border-radius:5px;
 }
 .sensor{
 	position: absolute;
