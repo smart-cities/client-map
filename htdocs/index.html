@@ -13,22 +13,36 @@
 		<header>
 			<nav>
 				<ul>
-					<li><a href="#" id="tabMap">Map</a></li>
-					<li><a href="#" id="tabMoMap">Met Office Map</a></li>
-					<li><a href="#" id="tabService">Service</a></li>
+					<li><a href="#" id="homeTab" data-page="home">Map</a></li>
+					<li><a href="#" id="mapTab" data-page="moMap">Met Office Map</a></li>
+					<li><a href="#" id="serviceTab" data-page="service">Service</a></li>
 				</ul>
 			</nav>
 			<h1>Space Apps - Smart Cities</h1>
 		</header>
-		<section id="content">
+		<section id="home" class="content">
 			<h2>A title</h2>
 			<p>Some intro text here</p>
+			<section id="map">
+				<div id="customZoom">
+					<a id="customZoomIn" class="olButton" href="#customZoomIn">+</a>
+					<a id="customZoomOut" class="olButton" href="#customZoomOut">-</a>
+				</div>
+			</section>
 		</section>
-		<section id="map">
-			<div id="customZoom">
-				<a id="customZoomIn" class="olButton" href="#customZoomIn">+</a>
-				<a id="customZoomOut" class="olButton" href="#customZoomOut">-</a>
+		<section id="moMap" class="content">
+			<h2>Met Office</h2>
+			<div id="moMapHolder">
+				<div id="sensor1" class="sensor" data-temp="0"></div>
+				<div id="sensor2" class="sensor" data-temp="0"></div>
+				<div id="sensor3" class="sensor" data-temp="0"></div>
+				<div id="sensor4" class="sensor" data-temp="0"></div>
+				<div id="sensor5" class="sensor" data-temp="0"></div>
+				<div id="sensor6" class="sensor" data-temp="0"></div>
 			</div>
+		</section>
+		<section id="service" class="content">
+			<h2>Service</h2>
 		</section>
 	</div>
 </body>

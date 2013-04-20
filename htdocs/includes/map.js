@@ -58,6 +58,7 @@ var page = {
 		page.get_data();
 		map.addControl(hoverControl);
 		hoverControl.activate();
+		page.registerEvents();
 	},
 	dataLayer: new OpenLayers.Layer.Vector("KML", {
 		strategies: [new OpenLayers.Strategy.Fixed()],
@@ -119,6 +120,21 @@ var page = {
 	},
 	hide_tooltip: function(polygon) {
 		$('#tooltip').html('').hide();
+	},
+	showTab: function(tabId, sectionId){
+		
+	},
+	registerEvents: function(){
+		$('#homeTab').addClass('active');
+		$('.section').hide();
+		$('#home').show();
+		$('nav li a').unbind().click(function(){
+			console.log($(this).attr('id'), $(this).attr('data-page'));
+			$('.content').hide();
+			$('nav li a').removeClass('active');
+			$('#' + $(this).attr('id')).addClass('active');
+			$('#' + $(this).attr('data-page')).show();
+		});
 	}
 }
 
