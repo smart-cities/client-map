@@ -15,7 +15,10 @@ class ReadingApi {
 	 * Get data readings for the given bounding box.
 	 *
 	 * Currently doesn't obey lat/lng. Or even sensors.
-	 * Example $options string: {"sensors":["TEMP","RH","LIGHT"],"startLng":1,"endLng":1,"startLat":10,"endLat":10,"mode":"test"}
+	 *
+	 * Example $options string: {"sensors":["TEMP","RH","LIGHT"],"startLng":1,"endLng":1,"startLat":10,"endLat":10,"mode":"real"}
+	 *
+	 * Set mode to 'test' to return 50 randomly generated data points within your bounding box.
 	 *
 	 * @param string $options Json encoded options array
 	 * @return array
@@ -97,6 +100,64 @@ class ReadingApi {
 				'count'=>count($readings),
 				'readings'=>$readings
 				);
+	}
+
+	/**
+	 * API call for inserting data into the database
+	 *
+	 * $data is a JSON array which needs to contain the following fields:
+	 *
+	 * deviceId - our database device ID
+	 * OR
+	 * deviceGUID - our generated GUID for the device
+	 *
+	 * sensorName, which should be a string matching our sensor list (currently TEMP,RH,LIGHT)
+	 * dataFloat - the value if it's a floating point/integer number
+	 * dataString - the value if it's a string
+	 *
+	 * example string: {"deviceId":0, "sensorName":"TEMP", "dataFloat":100}
+	 *
+	 * @param string $data Json Object
+	 */
+	public function send($data) {
+		if ($data!='') {
+			$data = json_decode($data);
+		}
+
+		if (!is_object($data)) throw new RestException('400', 'Unable to parse JSON data');
+
+		try {
+			if (isset($data->deviceId)) {
+				$device = Device::find($data->deviceId);
+			} elseif (isset($data->deviceGUID)) {
+				$device = Device::find(array('conditions'=>array('GUID = ?',$data->deviceGUID),'limit'=>1));
+			}
+		} catch (RecordNotFoundException $e) {
+			throw new RestException('400', 'Unable to find device with the ID/GUID you specified');
+		}
+
+		try {
+			if (isset($device)) {
+				$reading = new Reading();
+
+				$reading->_device_id = $device->id;
+				$reading->sensorName = $data->sensorName;
+				$reading->dataFloat = isset($data->dataFloat) ? $data->dataFloat : null;
+				$reading->dataString = isset($data->dataString) ? $data->dataString : null;
+				$reading->save();
+			}
+		} catch (Exception $e) {
+			var_dump($e);
+			var_dump($e->getTrace());
+			exit;
+		}
+
+		$result = new stdClass();
+		$result->result = 'success';
+		$result->readingId = $reading->id;
+
+		return $result;
+
 	}
 
 }

@@ -14,6 +14,7 @@ class dbobject {
 	 * @var string
 	 */
 	public $pkey = 'id';
+
 	protected $hasBeenDeleted = false;
 	protected $hasBeenCreated = false;
 
@@ -123,6 +124,30 @@ class dbobject {
 		{
 			$this->_data[$name] = $value;
 		}
+	}
+
+	/**
+	 * @ignore
+	 */
+	public function __isset($name)
+	{
+		if (isset($this->_data['_' . $name . '_id']))
+		{
+			return isset($this->_data['_' . $name . '_id']);
+		}
+		return isset($this->_data[$name]);
+	}
+
+	/**
+	 * @ignore
+	 */
+	public function __unset($name)
+	{
+		if (isset($this->_data['_' . $name . '_id']))
+		{
+			unset($this->_data['_' . $name . '_id']);
+		}
+		unset($this->_data[$name]);
 	}
 
 
