@@ -437,7 +437,6 @@ class dbobject {
 		if (self::insertOrUpdate(self::tableize(get_class($this)), $this->fields,$forceInsert)) {
 
 		} else {
-			DB_PDO::getConnection()->rollBack();
 			return false;
 		}
 
