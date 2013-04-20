@@ -45,7 +45,7 @@ var page = {
 			   top: e.pageY + 15
 			});
 		});
-		hoverControl = new OpenLayers.Control.SelectFeature(page.dataLayer, {
+		/*hoverControl = new OpenLayers.Control.SelectFeature(page.dataLayer, {
 			hover: true,
 			highlightOnly: true,
 			renderIntent: "temporary",
@@ -54,10 +54,9 @@ var page = {
 				featurehighlighted: page.show_tooltip,
 				featureunhighlighted: page.hide_tooltip
 			}
-		})
-		page.get_data();
+		});
 		map.addControl(hoverControl);
-		hoverControl.activate();
+		hoverControl.activate();*/
 		page.registerEvents();
 	},
 	dataLayer: new OpenLayers.Layer.Vector("KML", {
@@ -126,7 +125,7 @@ var page = {
 	},
 	registerEvents: function(){
 		$('#homeTab').addClass('active');
-		$('.section').hide();
+		$('.content').hide();
 		$('#home').show();
 		$('nav li a').unbind().click(function(){
 			console.log($(this).attr('id'), $(this).attr('data-page'));
