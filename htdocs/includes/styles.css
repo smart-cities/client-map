@@ -47,22 +47,22 @@ nav ul li {
 }
 nav a{
 	padding:0.5em 1em;
+	border:0.1em solid #FFF;
 	background-color:#000;
 	color:#FFF;
 	text-decoration:none;
 	width:100%;
 	height:100%;
 }
-nav a:hover{
+nav a:hover, .active{
 	background-color:#FFF;
 	color:#000;
 	border:0.1em solid #000;
-	padding:0.3em 0.8em;
 }
-#content{
+.content{
 	padding:0 1em 1em 1em;
 }
-#content h2 {
+.content h2 {
 	margin:0;
 	padding:0;
 }
@@ -115,3 +115,40 @@ nav a:hover{
 	margin-top: 80px;
 }
 /* ----------------------------------------- */
+#moMapHolder{
+	background-image:url('../images/map.jpg');
+	display:block;
+	position:relative;
+	width:1150px;
+	height:733px;
+	margin:0 auto;
+}
+.sensor{
+	position: absolute;
+	width:140px;
+	height:30px;
+}
+#sensor1{
+	left: 507px;
+    top: 208px;
+}
+#sensor2{
+	top:270px;
+	left:770px;
+}
+#sensor3{
+	left: 308px;
+    top: 318px;
+}
+#sensor4{
+	left: 775px;
+    top: 407px;
+}
+#sensor5{
+	left: 340px;
+    top: 394px;
+}
+#sensor6{
+	left: 525px;
+    top: 452px;
+}
