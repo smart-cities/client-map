@@ -172,7 +172,7 @@ class ReadingApi {
 	public function getLast10Readings() {
 
 		$sql = "SELECT
-		Readings.*,Devices.id as deviceId, devices.lat as deviceLat, devices.lng as deviceLng, devices.name as deviceName, devices.GUID as deviceGUID
+		Readings.*,Devices.id as deviceId, Devices.lat as deviceLat, Devices.lng as deviceLng, Devices.name as deviceName, Devices.GUID as deviceGUID
 		FROM
 		Readings
 		LEFT JOIN
