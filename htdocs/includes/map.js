@@ -29,8 +29,8 @@ var page = {
 			// MIN_LON: -891534.32014409,
 			// MAX_LAT: 8427311.5011069,
 			// MAX_LON: 1065253.6036058,
-			OVERALL_MAX_ZOOM: 9,
-			DEFAULT_ZOOM: 8,
+			OVERALL_MAX_ZOOM: 18,
+			DEFAULT_ZOOM: 11,
 			MAP_TILES: new OpenLayers.Layer.OSM()		
 		},
 		control = new OpenLayers.Control()

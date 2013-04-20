@@ -40,4 +40,43 @@ section {
 	width:auto;
 	height:30em;
 	display:block;
+	padding:0;
+	margin:1em;
 }
+/* ----- custom zoom controls, because we can & it looks cooler than the defaults :D --------*/
+.olControlAttribution {
+	bottom: 5px;
+	font-size: 20px;
+}
+#customZoom {
+	z-index: 1001;
+	position: relative;
+	top: 20px;
+	left: 20px;
+	font-size:2em;
+}
+#customZoom a {
+	text-decoration: none;
+	position: absolute;
+	display: block;
+	padding:0.2em;
+	width:40px;
+	text-align: center;
+	font-weight: bold;
+	color: #fff;
+	background: #369;
+	border-radius: 10px;
+	-moz-border-radius: 7px;
+	-khtml-border-radius: 7px;
+	-webkit-border-radius: 7px;
+}
+#customZoom a:hover {
+	background: #036;
+}
+#customZoomIn {
+	top: 10px;
+}
+#customZoomOut {
+	margin-top: 80px;
+}
+/* ----------------------------------------- */
