@@ -160,4 +160,42 @@ class ReadingApi {
 
 	}
 
+	/**
+	 * Retrieve the last 10 readings from the database
+	 *
+	 */
+	public function getLast10Readings() {
+
+		$sql = "SELECT
+		*
+		FROM
+		Readings
+		LEFT JOIN
+		Devices on Devices.id = _device_id
+
+		ORDER BY Readings.id DESC
+		LIMIT 10
+		";
+
+		$db =  Dbo::getConnection();
+		$stm = $db->prepare($sql);
+		$db->executeStatement($stm,array());
+
+		$result = array();
+
+		while ($data=$stm->fetch(Dbo::FETCH_ASSOC)) {
+
+			$obj = new stdClass();
+			foreach ($data as $k=>$v) {
+				$obj->$k=$v;
+			}
+			$obj->sensorName='TEMP';
+
+			$result[]=$obj;
+
+		}
+
+		return array('Readings'=>$result);
+	}
+
 }
