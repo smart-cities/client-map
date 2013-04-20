@@ -69,7 +69,7 @@ class ReadingApi {
 
 			$sql = "SELECT
 				_device_id, timestamp, sensorName, dataFloat,
-				lat,lng, devices.name as device_name
+				lat,lng, Devices.name as device_name
 			FROM
 				Readings
 			LEFT JOIN
