@@ -144,9 +144,9 @@ nav a:hover, .active{
 }
 .number{
 	font-size: 1.5em;
-    left: 0.4em;
+    left: 0.35em;
     position: absolute;
-    top: 0;
+    top: -0.05em;
 }
 .value {
 	left: 3.5em;
