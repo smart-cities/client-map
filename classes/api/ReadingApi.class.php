@@ -55,6 +55,7 @@ class ReadingApi {
 				$obj->timestamp = time();
 				$obj->sensorName = 'TEMP';
 				$obj->sensorValue = rand(5,35);
+				$obj->device_name = 'RANDOM';
 
 				$readings[]=$obj;
 
@@ -68,7 +69,7 @@ class ReadingApi {
 
 			$sql = "SELECT
 				_device_id, timestamp, sensorName, dataFloat,
-				lat,lng
+				lat,lng, devices.name as device_name
 			FROM
 				Readings
 			LEFT JOIN
@@ -89,6 +90,8 @@ class ReadingApi {
 				$obj->timestamp = $data['timestamp'];
 				$obj->sensorName = $data['sensorName'] != '' ? $data['sensorName'] : 'TEMP';
 				$obj->sensorValue = $data['dataFloat'];
+				$obj->device_name = $data['device_name'];
+
 
 				$readings[]=$obj;
 
@@ -169,7 +172,7 @@ class ReadingApi {
 	public function getLast10Readings() {
 
 		$sql = "SELECT
-		Readings.*,Devices.id as deviceId, devices.lat as deviceLat, devices.lng as deviceLng, devices.name as deviceName, devices.GUID as deviceGUID
+		Readings.*,Devices.id as deviceId, Devices.lat as deviceLat, Devices.lng as deviceLng, Devices.name as deviceName, Devices.GUID as deviceGUID
 		FROM
 		Readings
 		LEFT JOIN
