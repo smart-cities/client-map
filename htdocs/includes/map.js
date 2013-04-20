@@ -1,7 +1,7 @@
 var map;
 var page = {	
 	init: function(){
-		var OSM_layer, dataLayer, mapOptions, constant;
+		var mapOptions, constant, control, hoverControl;
 		mapOptions = {
 			theme: null, // Prevent /theme/style.css from being requested
 			projection: new OpenLayers.Projection("EPSG:900913"),
@@ -9,7 +9,7 @@ var page = {
 			//units: "m",
 			//maxResolution: 156543.0339,
 			//maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34),
-			 controls: [
+			controls: [
 				new OpenLayers.Control.Navigation({
 					dragPanOptions: {
 						enableKinetic: true
@@ -33,7 +33,7 @@ var page = {
 			DEFAULT_ZOOM: 11,
 			MAP_TILES: new OpenLayers.Layer.OSM()		
 		},
-		control = new OpenLayers.Control()
+		control = new OpenLayers.Control();
 		map = new OpenLayers.Map("map", mapOptions);
 		map.addLayers([constant.MAP_TILES, page.dataLayer]);
 		map.zoomToMaxExtent();
@@ -42,8 +42,8 @@ var page = {
 		page.getData();
 		$(document).bind('mousemove', function(e){
 			$('#tooltip').css({
-			   left: e.pageX -100,
-			   top: e.pageY -15
+				left: e.pageX -100,
+				top: e.pageY -15
 			});
 		});
 		hoverControl = new OpenLayers.Control.SelectFeature(page.dataLayer, {
@@ -74,7 +74,7 @@ var page = {
 	},
 	loadMarkers: function () {
 		page.dataLayer.removeAllFeatures();
-		var locations = page.data.locations, i, location, attributes, markerStyle, marker, data = page.data;
+		var locations = page.data.locations, i, location, attributes, markerStyle, marker;
 		for (i = 0; i < locations.length; i++){
 			location = locations[i];
 			attributes = {name: location.name, data: location.values};
@@ -92,7 +92,7 @@ var page = {
 	show_tooltip: function(polygon) {
 		$('#tooltip').html("<h1>" + polygon.feature.attributes.name + "</h1><p>Temperature: "+ polygon.feature.attributes.data.temperature + "&deg; C<br>Humidity: "+ polygon.feature.attributes.data.humidity + "%</p>").show();
 	},
-	hide_tooltip: function(polygon) {
+	hide_tooltip: function() {
 		$('#tooltip').html('').hide();
 	},
 	registerEvents: function(){
@@ -107,7 +107,7 @@ var page = {
 			$('#' + $(this).attr('data-page')).show();
 		});
 	}
-}
+};
 
 $(document).ready(function () {
 	page.init();
