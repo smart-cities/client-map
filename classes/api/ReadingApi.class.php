@@ -117,7 +117,11 @@ class ReadingApi {
 	 * sensorName, which should be a string matching our sensor list (currently TEMP,RH,LIGHT)<br/>
 	 * dataFloat - the value if it's a floating point/integer number<br/>
 	 * dataString - the value if it's a string<br/>
-	 *<br/>
+	 * <br/>
+	 * You can optionally specify the following fields:<br/>
+	 * timestamp - the unix timestamp<br/>
+	 *
+	 * <br/>
 	 * example string: {"deviceId":0, "sensorName":"TEMP", "dataFloat":100}<br/>
 	 *
 	 * @param string $data Json Object
@@ -144,6 +148,9 @@ class ReadingApi {
 				$reading = new Reading();
 
 				$reading->_device_id = $device->id;
+				if (isset($data->timestamp)) {
+					$reading->timestamp = $data->timestamp;
+				}
 				$reading->sensorName = $data->sensorName;
 				$reading->dataFloat = isset($data->dataFloat) ? $data->dataFloat : null;
 				$reading->dataString = isset($data->dataString) ? $data->dataString : null;
@@ -202,5 +209,6 @@ class ReadingApi {
 
 		return array('Readings'=>$result);
 	}
+
 
 }
