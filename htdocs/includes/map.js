@@ -39,13 +39,14 @@ var page = {
 		map.zoomToMaxExtent();
 		map.setCenter(new OpenLayers.LonLat(constant.DEFAULT_LNG, constant.DEFAULT_LAT).transform(map.displayProjection, map.projection), constant.DEFAULT_ZOOM);
 		map.addControl(control);
+		page.getData();
 		$(document).bind('mousemove', function(e){
 			$('#tooltip').css({
-			   left: e.pageX + 15,
-			   top: e.pageY + 15
+			   left: e.pageX -100,
+			   top: e.pageY -15
 			});
 		});
-		/*hoverControl = new OpenLayers.Control.SelectFeature(page.dataLayer, {
+		hoverControl = new OpenLayers.Control.SelectFeature(page.dataLayer, {
 			hover: true,
 			highlightOnly: true,
 			renderIntent: "temporary",
@@ -56,72 +57,44 @@ var page = {
 			}
 		});
 		map.addControl(hoverControl);
-		hoverControl.activate();*/
+		hoverControl.activate();
 		page.registerEvents();
 	},
-	dataLayer: new OpenLayers.Layer.Vector("KML", {
-		strategies: [new OpenLayers.Strategy.Fixed()],
-		protocol: new OpenLayers.Protocol.HTTP({
-			url: "temp/d3e763bf-c11a-4a1b-b995-03ccfc754778.kml",
-			format: new OpenLayers.Format.KML({
-				extractStyles: true, 
-				extractAttributes: true,
-				maxDepth: 2
-			})
-		})
-	}),
+	dataLayer: new OpenLayers.Layer.Vector("Data Layer"),
 	data: [],
-	get_data: function () {
-		/*$.ajax({
-			url: "fileadmin/data/latestForecast.json",
+	getData: function () {
+		$.ajax({
+			url: "dummyData.json",
 			dataType: "json",
-			success: function (data) {
-				page.data = data;
-				page.loadMarkers('1');
+			success: function (response) {
+				page.data = response.data;
+				page.loadMarkers();
 			}
-		});*/
+		});
 	},
-	loadMarkers: function (period_id) {
+	loadMarkers: function () {
 		page.dataLayer.removeAllFeatures();
-		var locations = [], a, b, c, data = page.data;
-		for (a = 0; a < data.locations.length; a++){
-			//console.log(data.locations[a]);
-			var location = data.locations[a];
-			locationName = location.name;
-			lat = location.lat;
-			lon = location.lon;
-			for (b = 0; b < location.periods.length; b++){
-				period = location.periods[b];
-				if (period.id === period_id){
-					for (c = 0; c < period.detail.length; c++){
-						detail = period.detail[c];
-						text = detail.text + " <br>Max: " + detail.maxTemp + "&degc Min: " + detail.minTemp + "&degc <br>Wind: " + detail.windSpeed + " " + detail.windDirection;
-						attributes = {name: locationName, desc: text};
-						var markerStyle = {
-							externalGraphic: "typo3conf/ext/forecastBackend/img/" + detail.icon, 
-							graphicWidth: 48, 
-							graphicHeight: 48, 
-							graphicYOffset: -24,//-16, 
-							graphicOpacity: 0//0.7
-						};
-						marker = new OpenLayers.Geometry.Point(lon, lat);
-						marker.transform(map.displayProjection, map.projection);
-						//var imgTitle = 'Lat '+coordinate.lat+', long '+coordinate.lon;
-						page.dataLayer.addFeatures([new OpenLayers.Feature.Vector(marker, attributes, markerStyle)]);
-					}
-				}
-			}
+		var locations = page.data.locations, i, location, attributes, markerStyle, marker, data = page.data;
+		for (i = 0; i < locations.length; i++){
+			location = locations[i];
+			attributes = {name: location.name, data: location.values};
+			markerStyle = {
+				externalGraphic: "images/icon.png",
+				graphicWidth: 25, 
+				graphicHeight: 29,
+				name:location.values.temperature
+			};
+			marker = new OpenLayers.Geometry.Point(location.lon, location.lat);
+			marker.transform(map.displayProjection, map.projection);
+			page.dataLayer.addFeatures([new OpenLayers.Feature.Vector(marker, attributes, markerStyle)]);
 		}
 	},
 	show_tooltip: function(polygon) {
-		//console.log(polygon.feature);
-		$('#tooltip').html("<h1>" + polygon.feature.attributes.name + "</h1><p>"+ polygon.feature.attributes.desc + "</p>").show();
+		console.log(polygon.feature);
+		$('#tooltip').html("<h1>" + polygon.feature.attributes.name + "</h1><p>Temperature: "+ polygon.feature.attributes.data.temperature + "&deg; C<br>Humidity: "+ polygon.feature.attributes.data.humidity + "%</p>").show();
 	},
 	hide_tooltip: function(polygon) {
 		$('#tooltip').html('').hide();
-	},
-	showTab: function(tabId, sectionId){
-		
 	},
 	registerEvents: function(){
 		$('#homeTab').addClass('active');

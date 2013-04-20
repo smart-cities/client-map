@@ -1,0 +1,77 @@
+{"data":{
+	"time": "something if we use this...? if not, ditch the top level of this json file so it's just {'locations':[   etc ",
+	"locations":[
+		{
+			"name": "sensor1",
+			"lat" : 50.718917,
+			"lon" : -3.532823,
+			"values":{
+				"temperature":15,
+				"humidity": 98
+			}
+		},
+		{
+			"name": "sensor2",
+			"lat" : 50.719223,
+			"lon" : -3.502364,
+			"values":{
+				"temperature":18,
+				"humidity": 97
+			}
+		},
+		{
+			"name": "sensor3",
+			"lat" : 50.738184,
+			"lon" : -3.518929,
+			"values":{
+				"temperature":16,
+				"humidity": 98
+			}
+		},
+		{
+			"name": "sensor4",
+			"lat" : 50.735468,
+			"lon" : -3.488717,
+			"values":{
+				"temperature":17,
+				"humidity": 98
+			}
+		},
+		{
+			"name": "sensor5",
+			"lat" : 50.732535,
+			"lon" : -3.558669,
+			"values":{
+				"temperature":12,
+				"humidity": 98
+			}
+		},
+		{
+			"name": "sensor6",
+			"lat" : 50.715093,
+			"lon" : -3.554635,
+			"values":{
+				"temperature":13,
+				"humidity": 98
+			}
+		},
+		{
+			"name": "sensor7",
+			"lat" : 50.70444,
+			"lon" : -3.525968,
+			"values":{
+				"temperature":15,
+				"humidity": 98
+			}
+		},
+		{
+			"name": "sensor8",
+			"lat" : 50.710147,
+			"lon" : -3.505626,
+			"values":{
+				"temperature":24,
+				"humidity": 98
+			}
+		}
+	]}
+}
