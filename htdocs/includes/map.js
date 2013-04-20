@@ -35,7 +35,7 @@ var page = {
 		},
 		control = new OpenLayers.Control()
 		map = new OpenLayers.Map("map", mapOptions);
-		map.addLayers([constant.MAP_TILES/*, page.dataLayer*/]);
+		map.addLayers([constant.MAP_TILES, page.dataLayer]);
 		map.zoomToMaxExtent();
 		map.setCenter(new OpenLayers.LonLat(constant.DEFAULT_LNG, constant.DEFAULT_LAT).transform(map.displayProjection, map.projection), constant.DEFAULT_ZOOM);
 		map.addControl(control);
@@ -59,7 +59,17 @@ var page = {
 		map.addControl(hoverControl);
 		hoverControl.activate();
 	},
-	dataLayer: new OpenLayers.Layer.Vector("dataLayer"),
+	dataLayer: new OpenLayers.Layer.Vector("KML", {
+		strategies: [new OpenLayers.Strategy.Fixed()],
+		protocol: new OpenLayers.Protocol.HTTP({
+			url: "temp/d3e763bf-c11a-4a1b-b995-03ccfc754778.kml",
+			format: new OpenLayers.Format.KML({
+				extractStyles: true, 
+				extractAttributes: true,
+				maxDepth: 2
+			})
+		})
+	}),
 	data: [],
 	get_data: function () {
 		/*$.ajax({
