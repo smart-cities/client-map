@@ -12,10 +12,10 @@ class ReadingApi {
 	);
 
 	/**
-	 * Get data readings for the given bounding box
+	 * Get data readings for the given bounding box.
 	 *
+	 * Currently doesn't obey lat/lng. Or even sensors.
 	 * Example $options string: {"sensors":["TEMP","RH","LIGHT"],"startLng":1,"endLng":1,"startLat":10,"endLat":10,"mode":"test"}
-	 *
 	 *
 	 * @param string $options Json encoded options array
 	 * @return array
@@ -53,8 +53,39 @@ class ReadingApi {
 				$obj->sensorName = 'TEMP';
 				$obj->sensorValue = rand(5,35);
 
-				$obj->rand = rand(0,100)/100 ;
-				$obj->lengthLat = $lengthLat;
+				$readings[]=$obj;
+
+			}
+
+		} else {
+
+			// grab latest data for all devices in range
+
+			// @todo - range check lat/lng
+
+			$sql = "SELECT
+				_device_id, timestamp, sensorName, dataFloat,
+				lat,lng
+			FROM
+				Readings
+			LEFT JOIN
+				Devices on Devices.id = _device_id
+
+			GROUP BY _device_id,sensorName
+			ORDER BY timestamp DESC
+			";
+
+			$db =  Dbo::getConnection();
+			$stm = $db->prepare($sql);
+			$db->executeStatement($stm,array());
+
+			while ($data=$stm->fetch(Dbo::FETCH_ASSOC)) {
+
+				$obj = new DeviceReadingApiObject();
+				$obj->_device_id = $data['_device_id'];
+				$obj->timestamp = $data['timestamp'];
+				$obj->sensorName = $data['sensorName'] != '' ? $data['sensorName'] : 'TEMP';
+				$obj->sensorValue = $data['dataFloat'];
 
 				$readings[]=$obj;
 
