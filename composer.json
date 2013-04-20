@@ -1,0 +1,5 @@
+{
+    "require": {
+        "luracast/restler": "3.*@dev"
+    }
+}
