@@ -7,6 +7,7 @@ require __DIR__.'/vendor/autoload.php';
 
 // database connection parameters required:
 
+$GLOBALS['config']['rootpath'] = __DIR__;
 
 $config['db']['host']='127.0.0.1';
 $config['db']['db']='smartcities';

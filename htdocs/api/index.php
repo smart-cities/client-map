@@ -1,10 +1,10 @@
 <?php
-	require './../common.php';
+	require './../../common.php';
 
 	// remove this once the autoloader starts working...
-	require './../classes/api/DeviceApi.class.php';
-	require './../classes/api/ReadingApi.class.php';
-	require './../classes/DBObjectResponse.class.php';
+	require $GLOBALS['config']['rootpath'].'/classes/api/DeviceApi.class.php';
+	require $GLOBALS['config']['rootpath'].'/classes/api/ReadingApi.class.php';
+	require $GLOBALS['config']['rootpath'].'/classes/DBObjectResponse.class.php';
 
 	use Luracast\Restler\AutoLoader;
 
