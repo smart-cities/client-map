@@ -64,14 +64,17 @@ section {
 	text-align: center;
 	font-weight: bold;
 	color: #fff;
-	background: #369;
+	background: #000;
 	border-radius: 10px;
 	-moz-border-radius: 7px;
 	-khtml-border-radius: 7px;
 	-webkit-border-radius: 7px;
 }
 #customZoom a:hover {
-	background: #036;
+	background: #FFF;
+	border:0.1em solid #000;
+	color:#000;
+	padding:0.1em;
 }
 #customZoomIn {
 	top: 10px;
