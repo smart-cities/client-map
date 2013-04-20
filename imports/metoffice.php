@@ -12,7 +12,7 @@ if (($handle = fopen("metoffice.txt", "r")) !== FALSE) {
 
 			$r = new Reading();
 			$r->_device_id = $deviceId;
-			$r->timestsamp = $timestamp;
+			$r->timestamp = $timestamp;
 			$r->sensorName = 'TEMP';
 			$r->dataFloat = $tempCelcius;
 			$r->save();

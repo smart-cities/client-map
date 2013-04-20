@@ -15,4 +15,12 @@ class Reading extends dbobject {
 		$this->timestamp = time();
 	}
 
+	public function __toApi() {
+		$result = parent::__toApi();
+
+		$result->dateTimeString = date('Y-m-d H:i:s',$result->timestamp);
+		return $result;
+
+	}
+
 }

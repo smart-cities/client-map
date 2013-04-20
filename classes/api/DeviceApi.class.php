@@ -58,4 +58,31 @@ class DeviceApi {
 		return array('deviceReadings'=>$result);
 	}
 
+
+	/**
+	 * Get device sensor readings for the period specified.
+	 *
+	 * $period and $offset work combined to return data where (reading.timestamp > $offset-$period and reading.timestamp <= $offset)
+	 *
+	 * @param integer $device the device ID you're after
+	 * @param string $sensorName the sensor name you're after, defaults to 'TEMP'
+	 * @param integer $period the time period you want readings for. Defaults to one day.
+	 * @param integer $offset The offset for when you want readings - 0 = today, -86400 = yesterday
+	 */
+	public function getReadings($deviceId,$sensorName="TEMP",$period=86400,$offset=0) {
+
+		try {
+			$device = Device::find($deviceId);
+
+			$readings = array();
+
+			foreach ($device->getReadingsForSensor($sensorName,$period,$offset) as $reading) {
+				$readings[]=$reading->__toApi();
+			}
+
+		} catch (RecordNotFoundException $e) {
+		}
+		return array('device'=>$device->__toApi(),'readingCount'=>count($readings),'timeStart'=>time()-$offset-$period,'timeEnd'=>time()-$offset,  'deviceReadings'=>$readings);
+	}
+
 }
