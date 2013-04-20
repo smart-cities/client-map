@@ -8,4 +8,6 @@ class DeviceReadingApiObject {
 	public $device_lat = null;
 	public $device_lng = null;
 
+	public $device_name = null;
+
 }
