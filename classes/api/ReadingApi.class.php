@@ -14,10 +14,10 @@ class ReadingApi {
 	/**
 	 * Get data readings for the given bounding box.
 	 *
-	 * Currently doesn't obey lat/lng. Or even sensors.
-	 *
-	 * Example $options string: {"sensors":["TEMP","RH","LIGHT"],"startLng":1,"endLng":1,"startLat":10,"endLat":10,"mode":"real"}
-	 *
+	 * Currently doesn't obey lat/lng. Or even sensors.<br/>
+	 *<br/>
+	 * Example $options string: {"sensors":["TEMP","RH","LIGHT"],"startLng":1,"endLng":1,"startLat":10,"endLat":10,"mode":"real"}<br/>
+	 *<br/>
 	 * Set mode to 'test' to return 50 randomly generated data points within your bounding box.
 	 *
 	 * @param string $options Json encoded options array
@@ -105,17 +105,17 @@ class ReadingApi {
 	/**
 	 * API call for inserting data into the database
 	 *
-	 * $data is a JSON array which needs to contain the following fields:
+	 * $data is a JSON array which needs to contain the following fields:<br/>
 	 *
-	 * deviceId - our database device ID
-	 * OR
-	 * deviceGUID - our generated GUID for the device
-	 *
-	 * sensorName, which should be a string matching our sensor list (currently TEMP,RH,LIGHT)
-	 * dataFloat - the value if it's a floating point/integer number
-	 * dataString - the value if it's a string
-	 *
-	 * example string: {"deviceId":0, "sensorName":"TEMP", "dataFloat":100}
+	 * deviceId - our database device ID<br/>
+	 * OR<br/>
+	 * deviceGUID - our generated GUID for the device<br/>
+	 *<br/>
+	 * sensorName, which should be a string matching our sensor list (currently TEMP,RH,LIGHT)<br/>
+	 * dataFloat - the value if it's a floating point/integer number<br/>
+	 * dataString - the value if it's a string<br/>
+	 *<br/>
+	 * example string: {"deviceId":0, "sensorName":"TEMP", "dataFloat":100}<br/>
 	 *
 	 * @param string $data Json Object
 	 */
@@ -163,11 +163,13 @@ class ReadingApi {
 	/**
 	 * Retrieve the last 10 readings from the database
 	 *
+	 * Returns the last 10 readings out of the database, plain and simple.
+	 *
 	 */
 	public function getLast10Readings() {
 
 		$sql = "SELECT
-		*
+		Readings.*,Devices.id as deviceId, devices.lat as deviceLat, devices.lng as deviceLng, devices.name as deviceName, devices.GUID as deviceGUID
 		FROM
 		Readings
 		LEFT JOIN

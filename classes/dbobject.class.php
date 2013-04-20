@@ -379,9 +379,7 @@ class dbobject {
 		}
 	}
 
-
-
-	public static function getObjectsFromResults($result)
+	public static function getObjectsFromResults($result, $noCache = false)
 	{
 		$class = get_called_class();
 		/**
@@ -413,7 +411,7 @@ class dbobject {
 				{
 					case 'dateModified':
 					case 'dateCreated':
-						$value = SwitchSys\Date::fromMySQL($value);
+						$value = SW_Date::fromMySQL($value);
 						break;
 				}
 				$obj->$key = $value;
@@ -512,48 +510,33 @@ class dbobject {
 	 */
 	protected function insertOrUpdate($table, $fields, $forceInsert = false)
 	{
-
-		$action = ($forceInsert || is_null($this->{$this->pkey})) ? 'insert' : 'update';
+		$action = ($forceInsert || is_null($this->{$this->pkey})) ? 'INSERT INTO' : 'UPDATE';
 
 		$set = '';
 		$values = array();
-		// if forcing an insert, we need to set the primary key (do this first)
-		if ($forceInsert)
-			array_unshift($fields,$this->pkey);
+		// if forcing an insert, we need to set the primary key
+		if ($forceInsert) {
+			$fields[]=$this->pkey;
+		}
 
 		foreach ($fields as $f)
 		{
-			if($action === 'update')
-				$set .= $f . ' = ' . ((is_null($this->$f) && ($f != 'dateModified' && $f != 'dateCreated')) ? 'NULL' : '?') . ', ';
-			else
-				$set .= ((is_null($this->$f) && ($f != 'dateModified' && $f != 'dateCreated')) ? 'NULL' : '?') . ', ';
-
+			$set .= '`' . $f . '` = ' . ((is_null($this->$f) && ($f != 'dateModified' && $f != 'dateCreated')) ? 'NULL' : '?') . ', ';
 			if (!is_null($this->$f) || ($f == 'dateModified' || $f == 'dateCreated'))
 			{
 				switch ($f)
 				{
 					case 'dateModified':
 						// Update the modified date
-						if(Dbo::$engine === Dbo::ENGINE_MYSQL)
-							$val = $this->$f = date('Y-m-d H:i:s');
-						else
-							$val = $this->$f = date('Y-m-d\TH:i:s');
-						break;
+						$this->$f = time();
 					case 'dateCreated':
 						if ($forceInsert || is_null($this->{$this->pkey}))
 						{
-							$this->$f = time();
-							if(Dbo::$engine === Dbo::ENGINE_MYSQL)
-								$val = date('Y-m-d H:i:s',$this->$f);
-							else
-								$val = date('Y-m-d\TH:i:s',$this->$f);
+							$val = date('Y-m-d H:i:s');
 						}
 						else
 						{
-							if(Dbo::$engine === Dbo::ENGINE_MYSQL)
-								$val = date('Y-m-d H:i:s', $this->$f);
-							else
-								$val = date('Y-m-d\TH:i:s',$this->$f);
+							$val = date('Y-m-d H:i:s', $this->$f);
 						}
 						break;
 					default:
@@ -568,19 +551,17 @@ class dbobject {
 
 		if (!is_null($this->{$this->pkey}) && !$forceInsert)
 		{
-			$set .= ' WHERE ' . $this->pkey . ' = ?';
+			$set .= ' WHERE `' . $this->pkey . '` = ?';
 			$values[] = $this->{$this->pkey};
 		}
 
-		if($action === 'update')
-			$query  = sprintf('UPDATE %s SET %s', $table, $set);
-		else
-			$query = sprintf('INSERT INTO %s VALUES('.(Dbo::$engine === Dbo::ENGINE_MYSQL?'NULL,':'').'%s)', $table, $set); //MySQL requires a NULL placeholder for auto increment column
+		$query  = sprintf('%s `%s` SET %s', $action, $table, $set);
 
 		$stm    = Dbo::getConnection()->prepare($query);
 
 		if (Dbo::getConnection()->executeStatement($stm,$values))
 		{
+
 			if (is_null($this->{$this->pkey}))
 			{
 				$this->{$this->pkey} = Dbo::getConnection()->lastInsertId();
@@ -592,7 +573,6 @@ class dbobject {
 			return false;
 		}
 	}
-
 	/**
 	 * Deletes an object, or sets it's deleted flag to 1
 	 *
