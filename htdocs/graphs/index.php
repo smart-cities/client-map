@@ -65,7 +65,7 @@ d3.json(
 		'/api/device/readings/<?=$deviceId;?>?period=21600',
 		function (jsondata) {
 			data_<?=$deviceId;?> = jsondata.deviceReadings;
-			init(data_<?=$deviceId;?>);
+			init(data_<?=$deviceId;?>, <?=$index;?>);
 		});
 <? } ?>
 
@@ -82,7 +82,7 @@ var datastore = new Array();
 var firstInit = false
 var lineCount = 0;
 
-function init(data) {
+function init(data,index) {
 
 	data.forEach(function(d) {
 		d.date = new Date(d.timestamp*1000);
@@ -134,7 +134,7 @@ function init(data) {
 		.attr("clip-path", "url(#clip)")
 		.append("path")
 		.data([data])
-		.attr("class", "line line1")
+		.attr("class", "line line" + index)
 		.attr("d", line);
 
 		firstInit = true;
@@ -174,7 +174,7 @@ function init(data) {
 		.attr("clip-path", "url(#clip)")
 		.append("path")
 		.data([data])
-		.attr("class", "line line"+ lineCount)
+		.attr("class", "line line"+ index)
 		.attr("d", line);
 
 	}
