@@ -19,7 +19,11 @@ class Device extends dbobject {
 
 	public function getReadings() {
 		try {
-			return  Reading::find(array('conditions'=>array('_device_id = ? GROUP BY sensorName ORDER BY id desc',$this->id)));
+			foreach (array('TEMP') as $sensorName) {
+				$r  =Reading::find(array('conditions'=>array('_device_id = ? AND sensorName = ? ORDER BY `timestamp` desc LIMIT 1',$this->id,$sensorName)));
+					$result[]=$r;
+			}
+			return $result;
 		} catch (RecordNotFoundException $e) { }
 		return array();
 	}
