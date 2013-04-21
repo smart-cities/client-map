@@ -3,10 +3,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Device Graphs</title>
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" charset="utf-8"></script>
-
 <style>
 
 svg {
