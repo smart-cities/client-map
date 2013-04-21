@@ -54,7 +54,7 @@ $devices = array(14141,14142, 14143, 14144, 14145, 12630);
 foreach ($devices as $deviceId) {
 ?>
 d3.json(
-		'/api/device/readings/<?=$deviceId;?>',
+		'/api/device/readings/<?=$deviceId;?>?period=21600',
 		function (jsondata) {
 
 			data_<?=$deviceId;?> = jsondata.deviceReadings;
