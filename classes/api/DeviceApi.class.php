@@ -24,6 +24,13 @@ class DeviceApi {
 		}
 	}
 
+	/**
+	 * Add a device to our database
+	 *
+	 * This is not yet implemented
+	 *
+	 * @param string $device JSON encoded
+	 */
 	public function addDevice($device) {
 
 	}

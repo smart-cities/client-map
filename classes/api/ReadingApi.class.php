@@ -14,11 +14,12 @@ class ReadingApi {
 	/**
 	 * Get data readings for the given bounding box.
 	 *
-	 * Currently doesn't obey lat/lng. Or even sensors.<br/>
+	 * Currently doesn't obey sensors.<br/>
 	 *<br/>
 	 * Example $options string: {"sensors":["TEMP","RH","LIGHT"],"startLng":1,"endLng":1,"startLat":10,"endLat":10,"mode":"real"}<br/>
 	 *<br/>
-	 * Set mode to 'test' to return 50 randomly generated data points within your bounding box.
+	 * Set mode to 'test' to return 50 randomly generated data points within your bounding box.<br/>
+	 * The Bounding box should be specified as TOP LEFT position as the start, and BOTTOM RIGHT as the end coordinates<br/>
 	 *
 	 * @param string $options Json encoded options array
 	 * @return array
@@ -65,15 +66,32 @@ class ReadingApi {
 
 			// grab latest data for all devices in range
 
-			// @todo - range check lat/lng
+			// this code is awful. Someone please fix the lat/lng bounding box code!
+			$x1 = $x2 = $y1 = $y2 = null;
+
+			$x1 = $options['startLat'];
+			$x2 = $options['endLat'];
+			if ($x2 < $x1 )  { 	$t = $x1; $x1= $x2; $x2 = $t; }
+
+
+			// for the UK, the Longitudes we are using are going to be negative.
+
+			$y1 = $options['startLng'];
+			$y2 = $options['endLng'];
+
 
 			$sql = "SELECT
 				_device_id, timestamp, sensorName, dataFloat,
-				lat,lng, Devices.name as device_name
+				lat, lng, Devices.name as device_name
 			FROM
 				Readings
 			LEFT JOIN
 				Devices on Devices.id = _device_id
+
+			WHERE
+			Devices.lat >= ? AND Devices.lat <= ?
+			AND
+			Devices.lng >= ? AND Devices.lng <= ?
 
 			GROUP BY _device_id,sensorName
 			ORDER BY timestamp DESC
@@ -81,7 +99,7 @@ class ReadingApi {
 
 			$db =  Dbo::getConnection();
 			$stm = $db->prepare($sql);
-			$db->executeStatement($stm,array());
+			$db->executeStatement($stm,array($x1,$x2,$y1,$y2));
 
 			while ($data=$stm->fetch(Dbo::FETCH_ASSOC)) {
 
@@ -91,7 +109,8 @@ class ReadingApi {
 				$obj->sensorName = $data['sensorName'] != '' ? $data['sensorName'] : 'TEMP';
 				$obj->sensorValue = $data['dataFloat'];
 				$obj->device_name = $data['device_name'];
-
+				$obj->device_lat = $data['lat'];
+				$obj->device_lng = $data['lng'];
 
 				$readings[]=$obj;
 
@@ -101,7 +120,8 @@ class ReadingApi {
 
 		return array(
 				'count'=>count($readings),
-				'readings'=>$readings
+				'readings'=>$readings,
+
 				);
 	}
 

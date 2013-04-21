@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Device Graphs</title>
+</head>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" charset="utf-8"></script>
+
+<style>
+
+svg {
+font: 10px sans-serif;
+}
+
+.line {
+fill: none;
+stroke: #000;
+stroke-width: 1.5px;
+}
+
+.axis path, .axis line {
+fill: none;
+stroke: #000;
+shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<h1>Device Graphs</h1>
+
+
+
+<script>
+
+var n = 40,
+random = d3.random.normal(0, .2);
+var data ;
+
+var path, line,x,y,svg;
+
+d3.json(
+			'/api/device/readings/14142',
+			function (jsondata) {
+
+				// create the chart here with
+				// the returned data
+
+				//console.log(jsondata);
+
+				data = jsondata.deviceReadings;
+
+				init();
+			});
+
+
+function init() {
+
+	console.log(d3.max(data));
+
+	var margin = {top: 10, right: 10, bottom: 20, left: 40},
+	width = 960 - margin.left - margin.right,
+	height = 500 - margin.top - margin.bottom;
+
+	x = d3.scale.linear()
+	.domain([0, (data.length)])
+	.range([0, width]);
+
+	y = d3.scale.linear()
+	.domain([0,d3.max(data.map(function(d) { return d.dataFloat; }))])
+	.range([height, 0]);
+
+	x = d3.time.scale()
+		.domain([new Date(data[0].dateTimeString), d3.time.day.offset(new Date(data[data.length - 1].dateTimeString), 1)])
+
+	line = d3.svg.line()
+	.x(function(d, i) { return x(i); })
+	.y(function(d, i) { return y(d); });
+
+	svg = d3.select("body").append("svg")
+	.attr("width", width + margin.left + margin.right)
+	.attr("height", height + margin.top + margin.bottom)
+	.append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	svg.append("defs").append("clipPath")
+	.attr("id", "clip")
+	.append("rect")
+	.attr("width", width)
+	.attr("height", height);
+
+	svg.append("g")
+	.attr("class", "x axis")
+	.attr("transform", "translate(0," + height + ")")
+	.call(d3.svg.axis().scale(x).orient("bottom"));
+
+	svg.append("g")
+	.attr("class", "y axis")
+	.call(d3.svg.axis().scale(y).orient("left"));
+
+	path = svg.append("g")
+	.attr("clip-path", "url(#clip)")
+	.append("path")
+	.data(data.map(function(d) { return d.dataFloat; }))
+	.attr("class", "line")
+	.attr("d", line);
+
+	// tick();
+
+}
+
+function tick() {
+
+	// push a new data point onto the back
+	data.push(random());
+
+	// redraw the line, and slide it to the left
+	path
+	.attr("d", line)
+	.attr("transform", null)
+	.transition()
+	.duration(500)
+	.ease("linear")
+	.attr("transform", "translate(" + x(-1) + ")")
+	.each("end", tick);
+
+	// pop the old data point off the front
+	data.shift();
+
+}
+
+</script>
+
+</body>
+</html>
