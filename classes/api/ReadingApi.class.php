@@ -12,11 +12,11 @@ class ReadingApi {
 	);
 
 	/**
-	 * Get data readings for the given bounding box.
+	 * Get latest data readings for the given bounding box.
 	 *
 	 * Currently doesn't obey sensors.<br/>
 	 *<br/>
-	 * Example $options string: {"sensors":["TEMP","RH","LIGHT"],"startLng":1,"endLng":1,"startLat":10,"endLat":10,"mode":"real"}<br/>
+	 * Example $options string (for birmingham data) :{"sensors":["TEMP","RH","LIGHT"],"startLat":52.5960,"endLat":52.3960,"startLng":-2.003,"endLng":-1.766,"mode":"real"} <br/>
 	 *<br/>
 	 * Set mode to 'test' to return 50 randomly generated data points within your bounding box.<br/>
 	 * The Bounding box should be specified as TOP LEFT position as the start, and BOTTOM RIGHT as the end coordinates<br/>
