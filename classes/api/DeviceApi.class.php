@@ -87,8 +87,6 @@ class DeviceApi {
 				$readings[]=$reading->__toApi();
 			}
 
-			var_dump($readings[0]);exit;
-
 		} catch (RecordNotFoundException $e) {
 		}
 		return array('device'=>$device->__toApi(),'readingCount'=>count($readings),'timeStart'=>time()-$offset-$period,'timeEnd'=>time()-$offset,  'deviceReadings'=>$readings);
