@@ -23,8 +23,12 @@ var page = {
 			]
 		},
 		constant = {
-			DEFAULT_LNG: -3.533899,
-			DEFAULT_LAT: 50.718412,
+			/*exeter*/
+			//DEFAULT_LNG: -3.533899,
+			//DEFAULT_LAT: 50.718412,
+			/*birmingham */
+			DEFAULT_LNG: -1.887245,
+			DEFAULT_LAT: 52.480689,
 			// MIN_LAT: 6411819.9396445,
 			// MIN_LON: -891534.32014409,
 			// MAX_LAT: 8427311.5011069,
@@ -35,14 +39,14 @@ var page = {
 		},
 		control = new OpenLayers.Control();
 		map = new OpenLayers.Map("map", mapOptions);
-		map.addLayers([constant.MAP_TILES, page.dataLayer]);
+		map.addLayers([constant.MAP_TILES, page.dataLayer, page.overlayLayer]);
 		map.zoomToMaxExtent();
 		map.setCenter(new OpenLayers.LonLat(constant.DEFAULT_LNG, constant.DEFAULT_LAT).transform(map.displayProjection, map.projection), constant.DEFAULT_ZOOM);
 		map.addControl(control);
 		page.getData();
 		$(document).bind('mousemove', function(e){
 			$('#tooltip').css({
-				left: e.pageX -100,
+				left: e.pageX +15,
 				top: e.pageY -15
 			});
 		});
@@ -51,7 +55,7 @@ var page = {
 			highlightOnly: true,
 			renderIntent: "temporary",
 			eventListeners: {
-				beforefeaturehighlighted: page.show_tooltip,
+				//beforefeaturehighlighted: page.show_tooltip, //pointless calls it twice!
 				featurehighlighted: page.show_tooltip,
 				featureunhighlighted: page.hide_tooltip
 			}
@@ -61,36 +65,54 @@ var page = {
 		page.registerEvents();
 	},
 	dataLayer: new OpenLayers.Layer.Vector("Data Layer"),
+	overlayLayer: new OpenLayers.Layer.WMS(
+		"smartcities:example - Tiled", "http://smartcities.switchsystems.co.uk:8080/geoserver/smartcities/wms",
+		{
+			LAYERS: 'smartcities:example',
+			STYLES: '',
+			format: 'image/png',
+			tiled: true,
+			transparent:true
+		},
+		{
+			buffer: 0,
+			displayOutsideMaxExtent: true,
+			isBaseLayer: false,
+			yx : {'EPSG:900913' : false}
+		} 
+	),
 	data: [],
 	getData: function () {
 		$.ajax({
-			url: "dummyData.json",
+			url: "http://www.smartcities.switchsystems.co.uk/api/reading/data",
+			data: "options={\"sensors\":[\"TEMP\",\"RH\",\"LIGHT\"],\"startLat\":52.5960,\"endLat\":52.3960,\"startLng\":-2.003,\"endLng\":-1.766,\"mode\":\"real\"}",
 			dataType: "json",
 			success: function (response) {
-				page.data = response.data;
+				page.data = response;
 				page.loadMarkers();
 			}
 		});
 	},
 	loadMarkers: function () {
 		page.dataLayer.removeAllFeatures();
-		var locations = page.data.locations, i, location, attributes, markerStyle, marker;
+		var locations = page.data.readings, i, location, attributes, markerStyle, marker;
 		for (i = 0; i < locations.length; i++){
 			location = locations[i];
-			attributes = {name: location.name, data: location.values};
+			attributes = {name: location._device_id, data: location.sensorValue};
 			markerStyle = {
 				externalGraphic: "images/icon.png",
 				graphicWidth: 25, 
 				graphicHeight: 29,
-				name:location.values.temperature
+				name:location.sensorValue
 			};
-			marker = new OpenLayers.Geometry.Point(location.lon, location.lat);
+			marker = new OpenLayers.Geometry.Point(location.device_lng, location.device_lat);
 			marker.transform(map.displayProjection, map.projection);
 			page.dataLayer.addFeatures([new OpenLayers.Feature.Vector(marker, attributes, markerStyle)]);
 		}
 	},
 	show_tooltip: function(polygon) {
-		$('#tooltip').html("<h1>" + polygon.feature.attributes.name + "</h1><p>Temperature: "+ polygon.feature.attributes.data.temperature + "&deg; C<br>Humidity: "+ polygon.feature.attributes.data.humidity + "%</p>").show();
+		// this is a bit nasty, should probably build the elements properly...
+		$('#tooltip').html("<h1>Sensor: " + polygon.feature.attributes.name + "</h1><p>Temperature: "+ polygon.feature.attributes.data + "&deg; C</p>").show();
 	},
 	hide_tooltip: function() {
 		$('#tooltip').html('').hide();
@@ -106,9 +128,28 @@ var page = {
 			$('#' + $(this).attr('id')).addClass('active');
 			$('#' + $(this).attr('data-page')).show();
 		});
+	},
+	loadBuildingData: function(){
+		
+		$.ajax({
+			url: "http://www.smartcities.switchsystems.co.uk/api/device/data/14145%2C%2014141%2C14144%2C14143%2C12630%2C14142",
+			dataType: "json",
+			cache: false,
+			success: function (response) {
+				for (i=0; i< response.deviceReadings.length; i++){
+					var reading = response.deviceReadings[i].device.readings[0].dataFloat;
+					$('#sensor' + (i + 1) + ' .value').html(reading + '&deg; C');
+				}
+			}
+		});
+		
+		
 	}
 };
 
 $(document).ready(function () {
 	page.init();
+	page.loadBuildingData();
+	//this is horrible... but...
+	window.setTimeout(function(){page.loadBuildingData()}, 120000);
 });    
