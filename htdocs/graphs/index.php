@@ -46,12 +46,12 @@ svg {
 <h1>Device Graphs</h1>
 
 <?php
-$devices = array(14141,14142, 14143, 14144, 14145, 12630);
+$devices = array(14141 => 2,14142 => 6, 14143 => 4, 14144 => 3, 14145 => 1, 12630 => 5);
 
 $x=0;
-foreach ($devices as $deviceId) {
+foreach ($devices as $deviceId => $index) {
 $x++;
-echo '<div class="legend line'.$x.'">Device #'.$deviceId.'</div>';
+echo '<div class="legend line'.$x.'">Device '.$index.' <br/> #'.$deviceId.'</div>';
 }
 
 ?>
@@ -60,7 +60,7 @@ echo '<div class="legend line'.$x.'">Device #'.$deviceId.'</div>';
 
 var path, x,y,svg;
 
-<?php foreach ($devices as $deviceId) { ?>
+<?php foreach ($devices as $deviceId => $index) { ?>
 d3.json(
 		'/api/device/readings/<?=$deviceId;?>?period=21600',
 		function (jsondata) {
