@@ -21,15 +21,17 @@ svg {
 
 .line1 {
 	stroke:#1f77b4;
+	background-color:#1f77b4;
 }
 .line2 {
 	stroke: #2ca02c;
+	background-color:#2ca02c
 }
-.line3 { stroke: #d62728;}
-.line4 { stroke: #9467bd; }
-.line5 { stroke: #8c564b; }
-.line6 { stroke: #e377c2; }
-.line7 { stroke: #7f7f7f; }
+.line3 { stroke: #d62728; background-color:#d62728; }
+.line4 { stroke: #9467bd; background-color:#9467bd;}
+.line5 { stroke: #8c564b; background-color:#8c564b;}
+.line6 { stroke: #e377c2; background-color:#e377c2;}
+.line7 { stroke: #7f7f7f; background-color:#7f7f7f;}
 
 .axis path, .axis line {
 	fill: none;
@@ -37,30 +39,34 @@ svg {
 	shape-rendering: crispEdges;
 }
 
+.legend { color:#fff; width:100px; float:left; font-weight:bold; padding:1px 3px; }
+
 </style>
 <body>
 <h1>Device Graphs</h1>
 
-<script>
-
-
-var path, x,y,svg;
-
-var devices = [14141, 14142, 14143, 14144, 14145, 12630];
-
 <?php
 $devices = array(14141,14142, 14143, 14144, 14145, 12630);
 
+$x=0;
 foreach ($devices as $deviceId) {
+$x++;
+echo '<div class="legend line'.$x.'">Device #'.$deviceId.'</div>';
+}
+
 ?>
+
+<script>
+
+var path, x,y,svg;
+
+<?php foreach ($devices as $deviceId) { ?>
 d3.json(
 		'/api/device/readings/<?=$deviceId;?>?period=21600',
 		function (jsondata) {
-
 			data_<?=$deviceId;?> = jsondata.deviceReadings;
 			init(data_<?=$deviceId;?>);
 		});
-
 <? } ?>
 
 var minY = 0, maxY = 50;
@@ -85,6 +91,7 @@ function init(data) {
 
 	if (firstInit==false) {
 
+		lineCount++;
 		maxY = d3.max(data.map(function(d) { return d.dataFloat*1; }));
 		maxY = 50;
 
@@ -127,7 +134,7 @@ function init(data) {
 		.attr("clip-path", "url(#clip)")
 		.append("path")
 		.data([data])
-		.attr("class", "line")
+		.attr("class", "line line1")
 		.attr("d", line);
 
 		firstInit = true;
